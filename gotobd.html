@@ -1,0 +1,52 @@
+<html>
+<body>
+<script language="javascript">
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    var url=getQueryString("url");
+    var pwd=getQueryString("pwd");
+    var surl=getSurl(url);
+
+    function getSurl(url){
+        debugger;
+        var pos=url.indexOf("/s/1");
+        if(pos!=-1){
+            return url.substring(pos+4).trim();
+        }else{
+            pos=url.indexOf("surl=");
+            if(pos!=-1){
+                return url.substring(pos+5).trim();
+            }else{
+                return '';
+            }
+        }
+    }
+    window.onload=function () {
+        debugger;
+        if(!surl || surl=='') {
+            document.location.replace(url);
+            return;
+        }
+        document.getElementById("form1").setAttribute("action","https://pan.baidu.com/share/verify?surl="+surl+"&t=1533789159454&channel=chunlei&web=1&app_id=250528&bdstoken=null&logid=MTUzMzc4OTE1OTQ1NjAuMjgwMjI4MDg5MzA4MzY2Mg==&clienttype=");
+        document.getElementById("pwd").setAttribute("value",pwd);
+
+        document.cookie="PANWEB=1; BAIDUID=46A4081AA8E80D47E09AC4B41EE0416E:FG=1;";
+        document.getElementById("form1").submit();
+        document.getElementById("id_iframe").onload=function(){
+            debugger;
+           document.location.replace("https://pan.baidu.com/s/1"+surl);
+        }
+    };
+</script>
+<form id="form1" action="" method="post" target="id_iframe">
+    <input type="hidden" value="dyfx" id="pwd" name="pwd" />
+    <input type="hidden" value="" id="vcode" name="vcode" />
+    <input type="hidden" value="" id="vcode_str" name="vcode_str" />
+</form>
+<iframe id="id_iframe" name="id_iframe" style="display:none;" ></iframe>
+</body>
+</html>
